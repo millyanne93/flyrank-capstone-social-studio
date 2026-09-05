@@ -38,3 +38,52 @@ export async function getVariantsByPostId(postId: string): Promise<Variant[]> {
 export async function getVariantById(id: string): Promise<Variant | null> {
   return await queryOne<Variant>('SELECT * FROM variants WHERE id = $1', [id]);
 }
+
+export async function updateVariantStatus(
+  id: string,
+  status: 'approved' | 'rejected' | 'published'
+): Promise<Variant | null> {
+  const rows = await query<Variant>(
+    `UPDATE variants
+     SET status = $1, updated_at = NOW()
+     WHERE id = $2
+     RETURNING *`,
+    [status, id]
+  );
+  return rows[0] || null;
+}
+
+export async function updateVariantContent(
+  id: string,
+  content: string
+): Promise<Variant | null> {
+  const rows = await query<Variant>(
+    `UPDATE variants
+     SET content = $1, updated_at = NOW()
+     WHERE id = $2 AND status = 'draft'
+     RETURNING *`,
+    [content, id]
+  );
+  return rows[0] || null;
+}
+
+export async function attachVariantToSlot(
+  variantId: string,
+  slotId: string
+): Promise<Variant | null> {
+  try {
+    const rows = await query<Variant>(
+      `UPDATE variants
+       SET slot_id = $1, updated_at = NOW()
+       WHERE id = $2 AND status = 'approved'
+       RETURNING *`,
+      [slotId, variantId]
+    );
+    return rows[0] || null;
+  } catch (error: any) {
+    if (error.code === '23505') {
+      return null; 
+    }
+    throw error;
+  }
+}

@@ -70,13 +70,58 @@
 
 ---
 
-## AI Usage Summary (Phase 1-2)
+## Phase 3: Review Workflow
+
+### AI Tools Used
+- **Tool**: Claude (via web interface)
+- **Purpose**: Code generation, debugging database constraints, testing
+- **Frequency**: Heavy usage during Phase 3 implementation
+
+### Where AI Helped
+
+| File/Component | What AI Provided | My Changes |
+|----------------|------------------|------------|
+| variants.routes.ts | Approve/reject/schedule endpoints | Added proper error handling |
+| variants.repository.ts | Status update functions | Added attachVariantToSlot with duplicate check |
+| slots.repository.ts | CRUD operations | Created repository from scratch |
+| server.ts | Route registration | Added all Phase 3 routes |
+
+### Where AI Got It Wrong
+
+| Issue | What Happened | How I Fixed It |
+|-------|---------------|----------------|
+| Missing unique constraint | AI assumed constraint existed | Added ALTER TABLE to add uq_variants_slot_id |
+| Duplicate slot assignments | No constraint meant multiple variants per slot | Manually cleared duplicates, added constraint |
+| attachVariantToSlot | AI didn't check for existing slot_id | Added explicit check before updating |
+
+### Lessons Learned
+1. **Database constraints are the only true enforcement** - Always verify with \d table_name
+2. **Manual duplicate cleanup needed** - Had to clear existing duplicates before adding constraint
+3. **409 Conflict is the right HTTP status** - For slot already occupied
+4. **Check the schema first** - Don't assume constraints exist
+
+### Phase 3 Status
+
+| Feature | Status | Evidence |
+|---------|--------|----------|
+| Approve endpoint | ✅ Working | curl POST /api/variants/:id/approve |
+| Reject endpoint | ✅ Working | curl POST /api/variants/:id/reject |
+| Edit endpoint | ✅ Working | curl PATCH /api/variants/:id |
+| Create slot | ✅ Working | curl POST /api/slots |
+| Schedule approved | ✅ Working | curl POST /api/variants/:id/schedule |
+| Schedule draft (blocked) | ✅ Working | 400 error returned |
+| Schedule occupied (409) | ✅ Working | 409 conflict returned |
+| Unique constraint | ✅ Working | uq_variants_slot_id in schema |
+
+---
+
+## AI Usage Summary (Phase 1-3)
 
 | Metric | Value |
 |--------|-------|
-| Total AI-assisted files | 15+ |
+| Total AI-assisted files | 20+ |
 | AI code generation % | ~65% |
 | Manual fixes/adaptations | ~35% |
-| Bugs introduced by AI | 3 |
-| Bugs caught by human review | 3 |
+| Bugs introduced by AI | 4 |
+| Bugs caught by human review | 4 |
 | Bugs in production | 0 |
