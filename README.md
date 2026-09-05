@@ -164,6 +164,7 @@ src/
 │   └── posts.schema.ts
 ├── config.ts                 # Configuration
 └── server.ts                 # Entry point
+```
 ## Key Design Decisions
 Validation is the trust boundary — Never trust LLM output
 
