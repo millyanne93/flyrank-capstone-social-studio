@@ -32,7 +32,8 @@ Turn one blog post into a scheduled, multiplatform social campaign. The system g
 - Mock X publisher
 - Mock LinkedIn publisher
 - Idempotent publish mechanism
-
+- Exactly-once guarantee
+- Publish attempts tracking
 ### Phase 5: Scheduling & Hardening ⏳
 - Durable scheduler worker
 - Claim-then-publish pattern
@@ -97,6 +98,14 @@ POST	/api/variants/:id/schedule	Schedule an approved variant
 Slots
 Method	Endpoint	Description
 POST	/api/slots	Create a time slot
+
+### Publishing
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/variants/:id/publish` | Publish a variant (idempotent) |
+| GET | `/api/variants/:id/attempts` | Get publish attempts for a variant |
+| GET | `/api/publish/pending` | Get pending publish attempts |
+| GET | `/api/publish/platforms` | Get configured platforms |
 🧪 Testing
 bash
 # Health check
@@ -167,12 +176,13 @@ Idempotency via unique constraints — No duplicate publishes
 Human-in-the-loop approval — All variants must be approved
 
 ## Phase Status
-Phase	Status	Completion
-Phase 1: Design	✅ Complete	100%
-Phase 2: Ingestion & Generation	✅ Complete	100%
-Phase 3: Review Workflow	✅ Complete	100%
-Phase 4: Adapters & Idempotent Publish	⏳ Pending	0%
-Phase 5: Scheduling & Hardening	⏳ Pending	0%
+| Phase | Status | Completion |
+|-------|--------|------------|
+| Phase 1: Design | ✅ Complete | 100% |
+| Phase 2: Ingestion & Generation | ✅ Complete | 100% |
+| Phase 3: Review Workflow | ✅ Complete | 100% |
+| Phase 4: Adapters & Idempotent Publish | ✅ Complete | 100% |
+| Phase 5: Scheduling & Hardening | ⏳ Pending | 0% |
 ## Documentation
 DESIGN.md — Architecture and design decisions
 

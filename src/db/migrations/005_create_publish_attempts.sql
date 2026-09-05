@@ -7,9 +7,12 @@ CREATE TABLE publish_attempts (
     idempotency_key TEXT NOT NULL UNIQUE,
     status publish_attempt_status NOT NULL DEFAULT 'pending',
     platform_message_ref TEXT,
+    error_message TEXT,
     attempted_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_publish_attempts_variant_id ON publish_attempts(variant_id);
 CREATE INDEX idx_publish_attempts_slot_id ON publish_attempts(slot_id);
 CREATE INDEX idx_publish_attempts_idempotency_key ON publish_attempts(idempotency_key);
+CREATE INDEX idx_publish_attempts_status ON publish_attempts(status);

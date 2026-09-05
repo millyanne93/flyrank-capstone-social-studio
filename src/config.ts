@@ -8,8 +8,6 @@ export const config = {
   gemini: {
     apiKey: process.env.GEMINI_API_KEY || '',
   },
-  telegram: {
-    botToken: process.env.TELEGRAM_BOT_TOKEN || '',
-    chatId: process.env.TELEGRAM_CHAT_ID || '',
-  },
+  telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || '',
+  telegramChatId: process.env.TELEGRAM_CHAT_ID || '',
 };

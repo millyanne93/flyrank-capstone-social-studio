@@ -115,13 +115,62 @@
 
 ---
 
-## AI Usage Summary (Phase 1-3)
+## Phase 4: Adapters & Idempotent Publish
+
+### AI Tools Used
+- **Tool**: Claude (via web interface)
+- **Purpose**: Adapter pattern implementation, idempotency logic, Telegram integration
+- **Frequency**: Heavy usage during Phase 4 implementation
+
+### Where AI Helped
+
+| File/Component | What AI Provided | My Changes |
+|----------------|------------------|------------|
+| publisher.interface.ts | Clean adapter interface | Added proper TypeScript types |
+| mock-x.publisher.ts | Mock implementation with random failures | Adjusted failure rates |
+| mock-linkedin.publisher.ts | Mock implementation with delays | Adjusted timing and logging |
+| telegram.publisher.ts | Real Telegram bot integration | Added error handling and config |
+| publishAttempts.repository.ts | CRUD operations | Added idempotency key lookup |
+| publish.service.ts | Core idempotent logic | Fixed config loading issue |
+| publish.routes.ts | API endpoints | Added pending attempts and platforms endpoints |
+| server.ts | Route registration | Added Phase 4 routes |
+
+### Where AI Got It Wrong
+
+| Issue | What Happened | How I Fixed It |
+|-------|---------------|----------------|
+| Config structure mismatch | AI expected flat config but had nested | Updated publish.service.ts to use config.telegram.botToken |
+| dotenv not loading | dotenv missing from project | Added 'dotenv/config' import and installed package |
+| Second publish behavior | AI expected "Already published" message | Got "Variant must be approved to publish" - actually better! |
+| Status check order | AI didn't check status before publish | Added status validation in publish service |
+
+### Lessons Learned
+1. **Config structure matters** - Be consistent with flat vs nested
+2. **dotenv must be imported** - Node.js doesn't auto-load .env
+3. **Status flow is critical** - `draft → approved → published` prevents re-publishing
+4. **Real vs Mock** - Telegram actually works! Need to handle real API responses
+
+### Phase 4 Status
+
+| Feature | Status | Evidence |
+|---------|--------|----------|
+| Publisher Interface | ✅ Working | Code compiles |
+| Mock X Publisher | ✅ Working | Published with mock ID |
+| Mock LinkedIn Publisher | ✅ Working | Published with mock ID |
+| Telegram Publisher (Real) | ✅ Working | Message ID "4" in Telegram |
+| Publish Attempts | ✅ Working | Table with unique idempotency_key |
+| Idempotent Publish | ✅ Working | Cannot publish twice |
+| Status Flow | ✅ Working | draft→approved→published |
+
+---
+
+## AI Usage Summary (Phase 1-4)
 
 | Metric | Value |
 |--------|-------|
-| Total AI-assisted files | 20+ |
+| Total AI-assisted files | 25+ |
 | AI code generation % | ~65% |
 | Manual fixes/adaptations | ~35% |
-| Bugs introduced by AI | 4 |
-| Bugs caught by human review | 4 |
+| Bugs introduced by AI | 5 |
+| Bugs caught by human review | 5 |
 | Bugs in production | 0 |
