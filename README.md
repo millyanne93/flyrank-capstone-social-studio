@@ -36,9 +36,12 @@ Turn one blog post into a scheduled, multiplatform social campaign. The system g
 - Publish attempts tracking
 ### Phase 5: Scheduling & Hardening ⏳
 - Durable scheduler worker
-- Claim-then-publish pattern
-- Retry logic with exponential backoff
-- Monitoring & logging
+- Auto-start on server boot
+- Due slot detection (every 10 seconds)
+- Automatic publishing
+- Exponential backoff retry logic
+- Graceful shutdown handling
+- Start/stop controls
 
 ## 🛠️ Tech Stack
 
@@ -183,7 +186,7 @@ Human-in-the-loop approval — All variants must be approved
 | Phase 2: Ingestion & Generation | ✅ Complete | 100% |
 | Phase 3: Review Workflow | ✅ Complete | 100% |
 | Phase 4: Adapters & Idempotent Publish | ✅ Complete | 100% |
-| Phase 5: Scheduling & Hardening | ⏳ Pending | 0% |
+| Phase 5: Scheduling & Hardening | ✅ Complete | 100% |
 ## Documentation
 DESIGN.md — Architecture and design decisions
 

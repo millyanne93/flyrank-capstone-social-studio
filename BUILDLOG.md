@@ -164,13 +164,49 @@
 
 ---
 
-## AI Usage Summary (Phase 1-4)
+## Phase 5: Scheduler & Hardening
+
+### AI Tools Used
+- **Tool**: Claude (via web interface)
+- **Purpose**: Scheduler implementation, graceful shutdown, retry logic
+- **Frequency**: Heavy usage during Phase 5 implementation
+
+### Where AI Helped
+
+| File/Component | What AI Provided | My Changes |
+|----------------|------------------|------------|
+| scheduler.types.ts | Configuration types | Added retry configuration |
+| scheduler.service.ts | Core scheduler logic | Added due slot detection, retry logic |
+| scheduler.routes.ts | Control endpoints | Added start/stop/status endpoints |
+| server.ts | Integration | Added auto-start, graceful shutdown |
+
+### Lessons Learned
+1. **Scheduler should auto-start** - Reduces manual intervention
+2. **Graceful shutdown is critical** - Prevents orphaned processes
+3. **10-second intervals are fine** - Good balance of responsiveness and performance
+4. **Database queries should be efficient** - LIMIT prevents overload
+
+### Phase 5 Status
+
+| Feature | Status | Evidence |
+|---------|--------|----------|
+| Scheduler Service | ✅ Working | Auto-starts on boot |
+| Due slot detection | ✅ Working | Found and processed slot |
+| Automatic publishing | ✅ Working | Published successfully |
+| No duplicates | ✅ Working | Only published once |
+| Control endpoints | ✅ Working | Start/stop/status work |
+| Graceful shutdown | ✅ Working | Handles SIGTERM/SIGINT |
+
+---
+
+## AI Usage Summary (Phase 1-5)
 
 | Metric | Value |
 |--------|-------|
-| Total AI-assisted files | 25+ |
+| Total AI-assisted files | 30+ |
 | AI code generation % | ~65% |
 | Manual fixes/adaptations | ~35% |
-| Bugs introduced by AI | 5 |
-| Bugs caught by human review | 5 |
+| Bugs introduced by AI | 6 |
+| Bugs caught by human review | 6 |
 | Bugs in production | 0 |
+| Project completion | 100% |
